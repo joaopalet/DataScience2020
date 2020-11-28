@@ -96,6 +96,23 @@ def multiple_bar_chart(xvalues: list, yvalues: dict, ax: plt.Axes = None, title:
         i += 1
     ax.set_xticks(x + width/len(xvalues) - step/2)
     ax.legend(fontsize='x-small', title_fontsize='small')
+    
+
+def multiple_bar_chart_v2(xvalues: list, yvalues: dict, ax: plt.Axes = None, title: str = '',
+                       xlabel: str = '', ylabel: str = '', percentage=False, w=0.8):
+    ax = set_axes(xvalues, ax=ax, title=title, xlabel=xlabel, ylabel=ylabel, percentage=percentage)
+
+    x = np.arange(len(xvalues))  # the label locations
+
+    width = w / (len(xvalues)*len(yvalues))
+    # the width of the bars
+    step = width / len(xvalues)
+    i: int = 0
+    for metric in yvalues:
+        ax.bar(x + i*width, yvalues[metric], width=width, align='center', label=metric)
+        i += 1
+    ax.set_xticks(x + width/len(xvalues) - step/2)
+    ax.legend(fontsize='x-small', title_fontsize='small')
 
 
 def plot_confusion_matrix(cnf_matrix: np.ndarray, classes_names: np.ndarray,
@@ -153,7 +170,7 @@ def plot_roc_chart(models: dict, tstX: np.ndarray, tstY: np.ndarray, ax: plt.Axe
 
     ax.plot([0, 1], [0, 1], color='navy', label='random', linewidth=1, linestyle='--',  marker='')
     for clf in models.keys():
-        metrics.plot_roc_curve(models[clf], tstX, tstY, ax=ax, marker='', linewidth=1)
+        metrics.plot_roc_curve(models[clf], tstX, tstY, ax=ax, marker='', linewidth=1, name = clf)
     ax.legend(loc="lower right")
 
 
